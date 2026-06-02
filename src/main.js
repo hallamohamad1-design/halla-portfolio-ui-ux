@@ -69,11 +69,15 @@ async function startScene() {
 
   orbitCtrl = new OrbitControls(camera, renderer.domElement);
   orbitCtrl.enableDamping = true;
-  orbitCtrl.dampingFactor = 0.06;
-  orbitCtrl.minDistance = 4;
-  orbitCtrl.maxDistance = 38;
-  orbitCtrl.minPolarAngle = 0.15;
-  orbitCtrl.maxPolarAngle = Math.PI / 2.05;
+  orbitCtrl.dampingFactor = 0.05;
+  orbitCtrl.minDistance = 3;
+  orbitCtrl.maxDistance = 45;
+  orbitCtrl.minPolarAngle = 0;          // allow looking straight up
+  orbitCtrl.maxPolarAngle = Math.PI;    // allow full vertical rotation
+  orbitCtrl.enablePan = true;           // allow panning with right-click
+  orbitCtrl.panSpeed = 0.8;
+  orbitCtrl.rotateSpeed = 0.6;
+  orbitCtrl.zoomSpeed = 1.2;
   orbitCtrl.target.set(0, 1, 0);
   orbitCtrl.update();
 
@@ -544,6 +548,31 @@ async function startScene() {
     const btn=e.target.querySelector('button'),orig=btn.textContent;
     btn.textContent='Sent! ✦';btn.style.background='#10b981';
     setTimeout(()=>{btn.textContent=orig;btn.style.background='';e.target.reset();},3000);
+  });
+
+  // ── Controls info overlay ───────────────────────────────────────────────────
+  const controlsInfo = document.getElementById('touchHint');
+  if (controlsInfo) {
+    controlsInfo.querySelector('.touch-hint-inner').innerHTML =
+      '<span class="touch-icon">🖱️</span><span>Left drag: rotate &nbsp;|&nbsp; Right drag: pan &nbsp;|&nbsp; Scroll: zoom &nbsp;|&nbsp; Click objects to explore</span>';
+    setTimeout(() => { controlsInfo.classList.add('visible'); setTimeout(() => controlsInfo.classList.remove('visible'), 5000); }, 2500);
+    renderer.domElement.addEventListener('pointerdown', () => controlsInfo.classList.remove('visible'), { once: true });
+  }
+
+  // ── CV Download — smart fallback ────────────────────────────────────────────
+  document.getElementById('cvDownloadBtn')?.addEventListener('click', function(e) {
+    // Try local file first, fall back gracefully
+    fetch('/HALLA-CV.pdf', { method: 'HEAD' }).then(r => {
+      if (!r.ok) {
+        e.preventDefault();
+        // Show instructions if no PDF uploaded yet
+        const msg = document.createElement('div');
+        msg.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(13,13,26,0.95);border:1px solid rgba(237,167,45,0.4);border-radius:10px;padding:1rem 1.5rem;color:#e8d5b0;font-size:0.82rem;z-index:9999;text-align:center;backdrop-filter:blur(12px);max-width:340px;';
+        msg.innerHTML = '📄 To enable CV download:<br><strong style="color:#eda72d">Drop HALLA-CV.pdf into the public/ folder</strong><br><small style="color:#666;margin-top:0.4rem;display:block">Then run: git add . && git commit -m "Add CV" && git push</small>';
+        document.body.appendChild(msg);
+        setTimeout(() => msg.remove(), 5000);
+      }
+    }).catch(() => {});
   });
 
   setupKB(camT,panelMap,camera,camHome);
