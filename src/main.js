@@ -342,20 +342,154 @@ async function startScene() {
   sGeo.setAttribute('position',new THREE.BufferAttribute(sP,3)); sGeo.setAttribute('color',new THREE.BufferAttribute(sC,3));
   scene.add(new THREE.Points(sGeo,new THREE.PointsMaterial({size:0.14,vertexColors:true,transparent:true,opacity:0.85})));
 
-  // ── CLICKABLES ─────────────────────────────────────────────────────────────
-  const clickables = [monL, monR, shG, mugG, chG, ghG, liG];
-  const panelMap = { monitorLeft:'panel-about', monitorRight:'panel-projects', shelf:'panel-experience', mug:'panel-contact', chairGroup:'panel-skills' };
+  // ── EXTRA ROOM DETAILS ─────────────────────────────────────────────────────
+
+  // 1. WINDOW on right wall — city glow effect
+  const winFrame = mk(new THREE.BoxGeometry(4.5,3.2,0.15), new THREE.MeshStandardMaterial({color:0x1a1a2e,roughness:0.5,metalness:0.3}));
+  winFrame.position.set(10.88,6.5,-3); winFrame.rotation.y=-Math.PI/2; scene.add(winFrame);
+  const winGlass = mk(new THREE.BoxGeometry(4.0,2.7,0.04), new THREE.MeshStandardMaterial({color:0x223355,emissive:0x335588,emissiveIntensity:0.6,roughness:0.05,metalness:0.1,transparent:true,opacity:0.6}));
+  winGlass.position.set(10.85,6.5,-3); winGlass.rotation.y=-Math.PI/2; scene.add(winGlass);
+  // Window cross bars
+  ['h','v'].forEach((dir,i)=>{const g=dir==='h'?[4.0,0.08,0.06]:[0.08,2.7,0.06];const bar=mk(new THREE.BoxGeometry(...g),M.leg.clone());bar.position.set(10.82,6.5,-3);bar.rotation.y=-Math.PI/2;scene.add(bar);});
+  // City glow light from window
+  const cityLight = new THREE.PointLight(0x334466,3,12); cityLight.position.set(9,6.5,-3); scene.add(cityLight);
+  // Window frame gold trim
+  const winTrim = mk(new THREE.BoxGeometry(0.08,3.2,4.5), M.gold.clone()); winTrim.position.set(10.9,6.5,-3); scene.add(winTrim);
+
+  // 2. FRAMED CERTIFICATES on back wall (left side, above bookshelf area)
+  [
+    {x:-7.5,y:4.0,label:'NTI',color:0xeda72d},
+    {x:-6.0,y:4.0,label:'MS',color:0x0077b5},
+    {x:-4.5,y:4.0,label:'PY',color:0x3776ab},
+  ].forEach(({x,y,label,color})=>{
+    const frame=mk(new THREE.BoxGeometry(1.1,0.85,0.06),new THREE.MeshStandardMaterial({color:0x1a1a2e,roughness:0.6}));
+    frame.position.set(x,y,-9.92); scene.add(frame);
+    frame.add(new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(1.12,0.87,0.07)),new THREE.LineBasicMaterial({color:color})));
+    const inner=mk(new THREE.BoxGeometry(0.9,0.68,0.03),new THREE.MeshStandardMaterial({color:0x0a0a18,roughness:0.9,emissive:color,emissiveIntensity:0.08}));
+    inner.position.z=0.02; frame.add(inner);
+    // Badge
+    const badge=mk(new THREE.BoxGeometry(0.25,0.25,0.04),new THREE.MeshStandardMaterial({color,emissive:color,emissiveIntensity:0.5,roughness:0.2}));
+    badge.position.set(0,0.05,0.04); frame.add(badge);
+    // Glow line
+    const gl=mk(new THREE.BoxGeometry(0.9,0.04,0.04),new THREE.MeshStandardMaterial({color,emissive:color,emissiveIntensity:2}));
+    gl.position.set(0,-0.28,0.04); frame.add(gl);
+  });
+
+  // 3. DESK LAMP (angle-poise style)
+  const lampBase=mk(new THREE.CylinderGeometry(0.18,0.22,0.08,12),M.leg.clone()); lampBase.position.set(-1.8,2.62,-7.1); scene.add(lampBase);
+  const lampArm1=mk(new THREE.CylinderGeometry(0.04,0.04,1.1,8),M.leg.clone()); lampArm1.position.set(-1.8,3.22,-7.1); lampArm1.rotation.z=0.25; scene.add(lampArm1);
+  const lampArm2=mk(new THREE.CylinderGeometry(0.04,0.04,0.9,8),M.leg.clone()); lampArm2.position.set(-1.55,3.8,-7.1); lampArm2.rotation.z=-0.35; scene.add(lampArm2);
+  const lampHead=mk(new THREE.ConeGeometry(0.22,0.35,12,1,true),new THREE.MeshStandardMaterial({color:0x1a1a2e,roughness:0.5,side:THREE.DoubleSide})); lampHead.position.set(-1.35,4.1,-7.1); lampHead.rotation.z=-0.3; scene.add(lampHead);
+  const lampBulb=mk(new THREE.SphereGeometry(0.08,8,8),new THREE.MeshStandardMaterial({color:0xffd060,emissive:0xffd060,emissiveIntensity:3})); lampBulb.position.set(-1.35,4.0,-7.1); scene.add(lampBulb);
+  const lampLight=new THREE.PointLight(0xffd060,4,5); lampLight.position.set(-1.35,3.9,-7.1); scene.add(lampLight);
+
+  // 4. FLOATING AMBIENT DUST PARTICLES
+  const dustGeo=new THREE.BufferGeometry(); const dustP=new Float32Array(200*3); const dustC=new Float32Array(200*3);
+  for(let i=0;i<200;i++){dustP[i*3]=(Math.random()-0.5)*18;dustP[i*3+1]=Math.random()*8+0.5;dustP[i*3+2]=(Math.random()-0.5)*14;const c=[[0.93,0.65,0.11],[0.67,0.33,1],[0,0.8,1]][Math.floor(Math.random()*3)];dustC[i*3]=c[0];dustC[i*3+1]=c[1];dustC[i*3+2]=c[2];}
+  const dustGeoB=new THREE.BufferGeometry(); dustGeoB.setAttribute('position',new THREE.BufferAttribute(dustP,3)); dustGeoB.setAttribute('color',new THREE.BufferAttribute(dustC,3));
+  const dustPts=new THREE.Points(dustGeoB,new THREE.PointsMaterial({size:0.06,vertexColors:true,transparent:true,opacity:0.5})); dustPts.name='dustPts'; scene.add(dustPts);
+
+  // 5. SPEAKER on desk (right side)
+  const spkBase=mk(new THREE.BoxGeometry(0.55,0.8,0.45),new THREE.MeshStandardMaterial({color:0x111122,roughness:0.6,metalness:0.3})); spkBase.position.set(-2.8,3.02,-7.2); scene.add(spkBase);
+  const spkGrill=mk(new THREE.BoxGeometry(0.42,0.6,0.04),new THREE.MeshStandardMaterial({color:0x0a0a1a,roughness:0.9})); spkGrill.position.set(-2.8,3.02,-6.96); scene.add(spkGrill);
+  for(let r=0;r<4;r++){for(let c=0;c<3;c++){const dot=mk(new THREE.CircleGeometry(0.03,8),new THREE.MeshStandardMaterial({color:0x222233,roughness:0.9}));dot.position.set(-2.92+c*0.12,2.82+r*0.15,-6.94);scene.add(dot);}}
+  const spkLED=mk(new THREE.CircleGeometry(0.04,8),neon(0x00ffcc,3)); spkLED.position.set(-2.8,3.42,-6.95); scene.add(spkLED);
+  // Second speaker (right desk)
+  const spk2=spkBase.clone(); spk2.position.set(3.8,3.02,-7.0); scene.add(spk2);
+  const spk2g=spkGrill.clone(); spk2g.position.set(3.8,3.02,-6.76); scene.add(spk2g);
+
+  // 6. BOOKSHELF DETAILS — coloured spines with gold letters effect
+  [-2,2].forEach(x=>{
+    const bookend=mk(new THREE.BoxGeometry(0.08,1.0,1.3),new THREE.MeshStandardMaterial({color:0xeda72d,roughness:0.3,metalness:0.6}));
+    bookend.position.set(x+8.5,0.08,-5); scene.add(bookend);
+  });
+
+  // 7. SMALL SUCCULENT PLANT on shelf top
+  const sucPot=mk(new THREE.CylinderGeometry(0.12,0.1,0.2,10),new THREE.MeshStandardMaterial({color:0xc68642,roughness:0.85})); sucPot.position.set(8.5,5.4,-5); scene.add(sucPot);
+  const sucLeaf=mk(new THREE.SphereGeometry(0.16,8,8),new THREE.MeshStandardMaterial({color:0x2d8a3e,roughness:0.7})); sucLeaf.scale.set(1,0.6,1); sucLeaf.position.set(8.5,5.68,-5); scene.add(sucLeaf);
+
+  // 8. NEON SIGN "AI × UX" on left wall
+  function nw(x,y,z,w,h,d,c){const m=mk(new THREE.BoxGeometry(w,h,d),neon(c));m.position.set(x,y,z);scene.add(m);}
+  // "AI"
+  nw(-10.5,9.5,-1,0.1,1.4,0.07,0xaa55ff); nw(-10.5,9.5,-1,0.7,0.1,0.07,0xaa55ff); // I
+  nw(-10.0,9.5,-1,0.1,1.4,0.07,0xaa55ff); nw(-9.6,9.5,-1,0.1,1.4,0.07,0xaa55ff); // A legs
+  nw(-9.8,9.5,-1,0.5,0.1,0.07,0xaa55ff); // A crossbar
+  // "×" divider
+  nw(-9.0,9.5,-1,0.6,0.1,0.07,0xeda72d); nw(-9.0,9.5,-1,0.1,0.6,0.07,0xeda72d);
+  // "UX"
+  nw(-8.2,9.5,-1,0.1,1.4,0.07,0x00ffcc); nw(-7.8,9.5,-1,0.1,1.4,0.07,0x00ffcc); // U sides
+  nw(-8.0,8.9,-1,0.5,0.1,0.07,0x00ffcc); // U bottom
+  nw(-7.2,9.5,-1,0.55,0.1,0.07,0x00ffcc); nw(-6.85,9.5,-1,0.55,0.1,0.07,0x00ffcc); // X diagonals approx
+  nw(-7.0,9.5,-1,0.1,1.4,0.07,0x00ffcc);
+
+  // 9. COFFEE STEAM more wisps
+  for(let i=0;i<2;i++){
+    const sw=mk(new THREE.SphereGeometry(0.05+i*0.02,6,6),new THREE.MeshStandardMaterial({color:0xffffff,transparent:true,opacity:0.12}));
+    sw.position.set(1.8+(i-0.5)*0.15,3.0+i*0.2,-5.5); sw.name=`steamX${i}`; scene.add(sw);
+  }
+
+  // 10. POWER STRIP under desk
+  const pstrip=mk(new THREE.BoxGeometry(1.8,0.12,0.35),new THREE.MeshStandardMaterial({color:0x111111,roughness:0.7})); pstrip.position.set(-3,0.06,-6.5); scene.add(pstrip);
+  for(let i=0;i<5;i++){const pl=mk(new THREE.CircleGeometry(0.04,8),new THREE.MeshStandardMaterial({color:0x333333,roughness:0.9}));pl.position.set(-3.5+i*0.38,0.13,-6.33);pl.rotation.x=-Math.PI/2;pstrip.add(pl);}
+  // Indicator LED on power strip
+  const psLED=mk(new THREE.CircleGeometry(0.04,8),neon(0x00ff44,4)); psLED.position.set(-2.56,0.13,-6.33); psLED.rotation.x=-Math.PI/2; scene.add(psLED);
+
+  // 11. STICKY NOTES on monitor bezels
+  [[0xffdd44,0],[0xff8866,1],[0x88ff88,2]].forEach(([c,i])=>{
+    const note=mk(new THREE.BoxGeometry(0.3,0.3,0.02),new THREE.MeshStandardMaterial({color:c,roughness:0.9}));
+    note.position.set(-3.5+(i*0.35),4.6,-6.6); note.rotation.y=0.15; note.rotation.z=(Math.random()-0.5)*0.2; scene.add(note);
+  });
+
+  // 12. CABLE MANAGEMENT — desk cable bundle
+  const cable=mk(new THREE.CylinderGeometry(0.04,0.04,2.5,6),new THREE.MeshStandardMaterial({color:0x222233,roughness:0.9}));
+  cable.rotation.z=Math.PI/2; cable.position.set(-1,2.1,-7.5); scene.add(cable);
+  // Build a dedicated laptop group for Skills so camera flies to it
+  const laptopGroup = new THREE.Group(); laptopGroup.name = 'laptop';
+  // Laptop base
+  const lapBase = mk(new THREE.BoxGeometry(2.8,0.12,1.9), new THREE.MeshStandardMaterial({color:0x111122,roughness:0.5,metalness:0.5}));
+  laptopGroup.add(lapBase);
+  // Keyboard area
+  const lapKB = mk(new THREE.BoxGeometry(2.5,0.02,1.5), new THREE.MeshStandardMaterial({color:0x1a1a2e,roughness:0.7}));
+  lapKB.position.set(0,0.07,0.1); laptopGroup.add(lapKB);
+  // RGB laptop keys (mini)
+  const lkc = [0xaa55ff,0x00ffcc,0xff4488,0xeda72d,0x4488ff];
+  for(let r=0;r<3;r++) for(let c=0;c<10;c++){
+    const col=lkc[(r*10+c)%lkc.length];
+    const k=mk(new THREE.BoxGeometry(0.18,0.015,0.15),new THREE.MeshStandardMaterial({color:col,emissive:col,emissiveIntensity:0.45,roughness:0.8}));
+    k.position.set(-1.05+c*0.22,0.088,-0.4+r*0.22); laptopGroup.add(k);
+  }
+  // Lid with screen
+  const lapLid = new THREE.Group();
+  const lapLidBody = mk(new THREE.BoxGeometry(2.8,1.8,0.1), new THREE.MeshStandardMaterial({color:0x111122,roughness:0.5,metalness:0.5}));
+  lapLid.add(lapLidBody);
+  const lapScr = mk(new THREE.BoxGeometry(2.5,1.55,0.04), new THREE.MeshStandardMaterial({color:0x050520,emissive:0x3366ff,emissiveIntensity:0.75,roughness:0.1}));
+  lapScr.position.z=0.06; lapScr.name='screenLaptop'; lapLid.add(lapScr);
+  const lapLogo = mk(new THREE.CircleGeometry(0.18,16), new THREE.MeshStandardMaterial({color:0xeda72d,emissive:0xeda72d,emissiveIntensity:0.8}));
+  lapLogo.position.set(0,0,-0.06); lapLogo.rotation.y=Math.PI; lapLid.add(lapLogo);
+  const lapStrip = mk(new THREE.BoxGeometry(2.5,0.05,0.05), neon(0xaa55ff)); lapStrip.position.set(0,-0.9,0.06); lapLid.add(lapStrip);
+  lapLid.position.set(0,0.9,-0.95); lapLid.rotation.x=-1.15; laptopGroup.add(lapLid);
+  // Gold front trim
+  const lapTrim = mk(new THREE.BoxGeometry(2.82,0.06,0.06), M.gold.clone()); lapTrim.position.set(0,0.1,0.96); laptopGroup.add(lapTrim);
+  // Laptop stand legs
+  [-1.3,1.3].forEach(x=>{ const f=mk(new THREE.BoxGeometry(0.18,0.04,1.9),new THREE.MeshStandardMaterial({color:0x0a0a18,roughness:0.6})); f.position.set(x,-0.08,0); laptopGroup.add(f); });
+
+  laptopGroup.position.set(1.8, 2.63, -5.5);
+  scene.add(laptopGroup);
+
+  const clickables = [monL, monR, laptopGroup, shG, mugG, chG, ghG, liG];
+  const panelMap = { monitorLeft:'panel-about', monitorRight:'panel-projects', laptop:'panel-skills', shelf:'panel-experience', mug:'panel-contact', chairGroup:'panel-skills' };
   const camT = {
-    monitorLeft:  {x:-5,y:6,z:2,  lx:-3.5,ly:4.3,lz:-7},
-    monitorRight: {x:2, y:6,z:2,  lx:0.8, ly:4.3,lz:-7.2},
-    shelf:        {x:10,y:5,z:2,  lx:8.5, ly:2.5,lz:-5},
-    mug:          {x:3, y:5,z:2,  lx:1.5, ly:2.7,lz:-5.5},
-    chairGroup:   {x:3, y:5,z:6,  lx:0.5, ly:2.5,lz:-1.5},
+    monitorLeft:  {x:-5,  y:6,   z:2,   lx:-3.5, ly:4.3,  lz:-7.0 },
+    monitorRight: {x:2,   y:6,   z:2,   lx:0.8,  ly:4.3,  lz:-7.2 },
+    laptop:       {x:2,   y:5.5, z:0.5, lx:1.8,  ly:3.2,  lz:-5.5 },
+    shelf:        {x:10,  y:5,   z:2,   lx:8.5,  ly:2.5,  lz:-5   },
+    mug:          {x:3,   y:4.5, z:0.5, lx:1.5,  ly:2.7,  lz:-5.5 },
+    chairGroup:   {x:2,   y:5.5, z:0.5, lx:1.8,  ly:3.2,  lz:-5.5 },
   };
   const camHome = {x:12,y:12,z:12,lx:0,ly:1,lz:0};
 
-  // Intro drop-in
-  [monL,monR,shG,mugG,chG].forEach((obj,i)=>{
+  // Intro drop-in — includes laptop
+  [monL,monR,laptopGroup,shG,mugG,chG].forEach((obj,i)=>{
     const oy=obj.position.y; obj.position.y=oy+6;
     setTimeout(()=>gsap.to(obj.position,{y:oy,duration:1.1,ease:'back.out(1.4)',delay:i*0.12}),1300);
   });
@@ -392,7 +526,7 @@ async function startScene() {
   });
 
   // Banner
-  const bm={'btn-about':'monitorLeft','btn-projects':'monitorRight','btn-skills':'chairGroup','btn-experience':'shelf','btn-contact':'mug'};
+  const bm={'btn-about':'monitorLeft','btn-projects':'monitorRight','btn-skills':'laptop','btn-experience':'shelf','btn-contact':'mug'};
   Object.entries(bm).forEach(([id,obj])=>{
     document.getElementById(id)?.addEventListener('click',()=>{
       if(isAnimating) return;
@@ -455,6 +589,17 @@ async function startScene() {
     const ct=scene.getObjectByName('chairTop'); if(ct)ct.rotation.y=t*0.2;
     const pt=scene.getObjectByName('plantTop'); if(pt)pt.rotation.z=Math.sin(t*0.35)*0.06;
     for(let i=0;i<3;i++){const w=scene.getObjectByName(i===0?'steam':`steam${i}`);if(w){w.position.y=0.55+i*0.18+Math.sin(t*2.0+i*1.2)*0.09;w.material.opacity=0.12+Math.sin(t*1.7+i)*0.07;}}
+    // Extra steam wisps
+    for(let i=0;i<2;i++){const w=scene.getObjectByName(`steamX${i}`);if(w){w.position.y=3.0+i*0.2+Math.sin(t*1.8+i*1.5)*0.08;w.material.opacity=0.08+Math.sin(t*2.1+i)*0.06;}}
+    // Dust particles drift
+    const dp=scene.getObjectByName('dustPts');
+    if(dp){dp.rotation.y=t*0.02;const pp=dp.geometry.attributes.position;for(let i=0;i<pp.count;i++){pp.setY(i,pp.getY(i)+Math.sin(t*0.3+i*0.5)*0.0008);}pp.needsUpdate=true;}
+    // Desk lamp pulse
+    if(typeof lampLight!=='undefined')lampLight.intensity=3.5+Math.sin(t*2.2)*1.0;
+    // Laptop screen breathe
+    const ls=scene.getObjectByName('screenLaptop'); if(ls)ls.material.emissiveIntensity=0.65+Math.sin(t*0.9)*0.2;
+    // City light pulse through window
+    if(typeof cityLight!=='undefined')cityLight.intensity=2.5+Math.sin(t*0.7)*0.8;
     // Hover outline
     if(!currentPanel&&!isAnimating){
       ray.setFromCamera(mouse,camera);
@@ -475,7 +620,7 @@ async function startScene() {
 
 // ── NAV HELPERS ───────────────────────────────────────────────────────────────
 function setupKB(camT, panelMap, camera, camHome) {
-  const codes = {about:'monitorLeft',projects:'monitorRight',skills:'chairGroup',experience:'shelf',contact:'mug'};
+  const codes = {about:'monitorLeft',projects:'monitorRight',skills:'laptop',experience:'shelf',contact:'mug'};
   const nums  = {'1':'about','2':'projects','3':'skills','4':'experience','5':'contact'};
   const kb = document.getElementById('keyBuffer');
   const kh = document.getElementById('keyHint');
