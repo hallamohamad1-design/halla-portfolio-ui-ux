@@ -1,0 +1,8 @@
+To add your photo to the About Me panel:
+
+1. Take the photo you shared in chat (the one with the hijab and dark background)
+2. Save it as: halla-photo.jpg
+3. Place it in this folder: portofolio/public/halla-photo.jpg
+
+The About panel will automatically show it in the circular avatar.
+If the file is missing, it shows "HM" initials as fallback.

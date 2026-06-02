@@ -30,7 +30,7 @@ function dismissLoading() {
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
-function startScene() {
+async function startScene() {
   // Loading bar
   const loadBar = document.getElementById('loadingBar');
   let p = 0;
@@ -64,6 +64,7 @@ function startScene() {
     camera.aspect = innerWidth / innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(innerWidth, innerHeight);
+    if (typeof cssRenderer !== 'undefined') cssRenderer.setSize(innerWidth, innerHeight);
   });
 
   orbitCtrl = new OrbitControls(camera, renderer.domElement);
@@ -206,7 +207,37 @@ function startScene() {
   const dm = mk(new THREE.BoxGeometry(5,0.015,2.5), new THREE.MeshStandardMaterial({color:0x111122,roughness:0.95}));
   dm.position.set(-1.5,2.61,-5.5); scene.add(dm);
 
-  // ── WALL TV ────────────────────────────────────────────────────────────────
+  // ── WALL TV — shows project slideshow via CSS3DObject ──────────────────────
+  // Import CSS3DRenderer for embedding real HTML on the TV screen
+  const { CSS3DRenderer, CSS3DObject } = await import('three/examples/jsm/renderers/CSS3DRenderer.js');
+
+  // CSS3D renderer setup
+  const cssRenderer = new CSS3DRenderer();
+  cssRenderer.setSize(innerWidth, innerHeight);
+  cssRenderer.domElement.style.position = 'fixed';
+  cssRenderer.domElement.style.top = '0';
+  cssRenderer.domElement.style.left = '0';
+  cssRenderer.domElement.style.pointerEvents = 'none';
+  cssRenderer.domElement.style.zIndex = '1';
+  document.getElementById('webgl').appendChild(cssRenderer.domElement);
+
+  const tvIframe = document.createElement('iframe');
+  tvIframe.src = '/tv-screen.html';
+  tvIframe.style.width  = '1100px';
+  tvIframe.style.height = '620px';
+  tvIframe.style.border = 'none';
+  tvIframe.style.background = '#050520';
+  tvIframe.style.borderRadius = '4px';
+  tvIframe.style.pointerEvents = 'none';
+
+  const cssScene = new THREE.Scene();
+  const cssObj = new CSS3DObject(tvIframe);
+  cssObj.scale.setScalar(0.0028);
+  // TV is at (-10.8, 6.5, -2) rotation.y = PI/2
+  cssObj.position.set(-10.78, 6.5, -2);
+  cssObj.rotation.y = Math.PI / 2;
+  cssScene.add(cssObj);
+
   const tvG = new THREE.Group(); tvG.name='wallTV';
   tvG.add(mk(new THREE.BoxGeometry(5.5,3.2,0.14), new THREE.MeshStandardMaterial({color:0x080810,roughness:0.5,metalness:0.6})));
   const tvScr = mk(new THREE.BoxGeometry(5.1,2.8,0.05), new THREE.MeshStandardMaterial({color:0x050520,emissive:0x3366cc,emissiveIntensity:0.6,roughness:0.1})); tvScr.position.z=0.08; tvScr.name='tvScreen'; tvG.add(tvScr);
@@ -437,6 +468,7 @@ function startScene() {
       }
     }
     renderer.render(scene,camera);
+    cssRenderer.render(cssScene, camera);
   }
   tick();
 } // end startScene

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    width:100vw; height:100vh; overflow:hidden;
+    background:#050520;
+    font-family: 'Segoe UI', sans-serif;
+    color:#fff;
+  }
+  .slide {
+    position:absolute; inset:0;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    padding:2rem;
+    opacity:0;
+    transition:opacity 0.8s ease;
+    text-align:center;
+  }
+  .slide.active { opacity:1; }
+
+  /* Header slide */
+  .slide-header { background: linear-gradient(135deg,#0d0d2e,#1a0a3a); }
+  .slide-header .name { font-size:3.5rem; font-weight:800; letter-spacing:0.1em; background:linear-gradient(135deg,#eda72d,#f5c05a); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:0.5rem; }
+  .slide-header .role { font-size:1.1rem; color:#a89070; letter-spacing:0.2em; text-transform:uppercase; margin-bottom:2rem; }
+  .slide-header .stats { display:flex; gap:3rem; justify-content:center; }
+  .stat-box { text-align:center; }
+  .stat-num { font-size:2.5rem; font-weight:800; color:#eda72d; display:block; }
+  .stat-lbl { font-size:0.7rem; color:#666; letter-spacing:0.15em; text-transform:uppercase; }
+
+  /* Project slides */
+  .slide-proj { justify-content:flex-start; padding:1.5rem 2rem; }
+  .proj-label { font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:#eda72d; margin-bottom:0.5rem; }
+  .proj-name { font-size:2rem; font-weight:800; margin-bottom:0.4rem; color:#fff; }
+  .proj-desc { font-size:0.85rem; color:#a89070; line-height:1.6; margin-bottom:1rem; max-width:600px; }
+  .proj-tags { display:flex; flex-wrap:wrap; gap:0.4rem; justify-content:center; margin-bottom:1rem; }
+  .tag { font-size:0.65rem; padding:0.2rem 0.6rem; border-radius:100px; border:1px solid rgba(237,167,45,0.3); color:#eda72d; background:rgba(237,167,45,0.08); }
+  .proj-preview-box {
+    width:100%; max-height:200px;
+    border-radius:10px; overflow:hidden;
+    border:1px solid rgba(237,167,45,0.2);
+    background:#0a0a1a;
+    position:relative;
+  }
+  .proj-preview-box iframe {
+    width:200%; height:400px;
+    border:none;
+    transform:scale(0.5); transform-origin:top left;
+    pointer-events:none;
+  }
+  .proj-url {
+    margin-top:0.75rem;
+    font-size:0.75rem;
+    color:#eda72d;
+    font-family: monospace;
+    letter-spacing:0.05em;
+    background:rgba(237,167,45,0.08);
+    padding:0.3rem 0.8rem;
+    border-radius:6px;
+    border:1px solid rgba(237,167,45,0.2);
+    display:inline-block;
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    position:fixed; bottom:0; left:0; height:3px;
+    background:linear-gradient(to right,#eda72d,#f5c05a);
+    width:0%; transition:width 0.1s linear;
+  }
+
+  /* Slide indicator */
+  .dots {
+    position:fixed; bottom:12px; left:50%; transform:translateX(-50%);
+    display:flex; gap:6px;
+  }
+  .dot {
+    width:6px; height:6px; border-radius:50%;
+    background:rgba(237,167,45,0.3);
+    transition:background 0.3s;
+  }
+  .dot.active { background:#eda72d; }
+
+  /* Scanlines overlay */
+  .scanlines {
+    position:fixed; inset:0; pointer-events:none;
+    background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.08) 2px,rgba(0,0,0,0.08) 4px);
+    z-index:100;
+  }
+</style>
+</head>
+<body>
+
+<!-- Intro slide -->
+<div class="slide slide-header active" id="s0">
+  <div class="name">HALLA MOHAMED</div>
+  <div class="role">AI Engineer · UI/UX Designer</div>
+  <div class="stats">
+    <div class="stat-box"><span class="stat-num">3.96</span><span class="stat-lbl">GPA</span></div>
+    <div class="stat-box"><span class="stat-num">5+</span><span class="stat-lbl">Projects</span></div>
+    <div class="stat-box"><span class="stat-num">3</span><span class="stat-lbl">Internships</span></div>
+  </div>
+</div>
+
+<!-- Ma5zany -->
+<div class="slide slide-proj" id="s1">
+  <div class="proj-label">Project 01</div>
+  <div class="proj-name">Ma5zany — Smart Inventory</div>
+  <div class="proj-desc">AI-powered inventory management with QR code scanner. Real-time stock tracking and Gemini API analysis.</div>
+  <div class="proj-tags"><span class="tag">Java</span><span class="tag">TypeScript</span><span class="tag">AI/ML</span><span class="tag">QR Scanner</span></div>
+  <div class="proj-preview-box">
+    <iframe src="https://ma5zany-final.vercel.app" loading="lazy"></iframe>
+  </div>
+  <div class="proj-url">▲ ma5zany-final.vercel.app</div>
+</div>
+
+<!-- CivicPulse -->
+<div class="slide slide-proj" id="s2">
+  <div class="proj-label">Project 02</div>
+  <div class="proj-name">CivicPulse — Issue Tracker</div>
+  <div class="proj-desc">Community-driven platform for reporting local infrastructure issues with interactive Google Maps and AI analysis.</div>
+  <div class="proj-tags"><span class="tag">React</span><span class="tag">TypeScript</span><span class="tag">tRPC</span><span class="tag">MySQL</span></div>
+  <div class="proj-preview-box">
+    <iframe src="https://civic-final-production-a84c.up.railway.app/" loading="lazy"></iframe>
+  </div>
+  <div class="proj-url">⬡ civic-final on Railway</div>
+</div>
+
+<!-- Port Scanner -->
+<div class="slide slide-proj" id="s3">
+  <div class="proj-label">Project 03</div>
+  <div class="proj-name">Port Scanner — Security Tool</div>
+  <div class="proj-desc">Web-based port scanner for network security analysis. Clean UI for efficient security assessment.</div>
+  <div class="proj-tags"><span class="tag">Python</span><span class="tag">Network Security</span><span class="tag">Web App</span></div>
+  <div class="proj-preview-box">
+    <iframe src="https://port-scanner-sand.vercel.app/" loading="lazy"></iframe>
+  </div>
+  <div class="proj-url">▲ port-scanner-sand.vercel.app</div>
+</div>
+
+<!-- Mind2Mind -->
+<div class="slide slide-proj" id="s4">
+  <div class="proj-label">Project 04</div>
+  <div class="proj-name">Mind2Mind — Mental Health</div>
+  <div class="proj-desc">Supportive platform connecting people through shared mental wellness resources. Human-centered design approach.</div>
+  <div class="proj-tags"><span class="tag">React</span><span class="tag">AI/ML</span><span class="tag">Mental Health</span></div>
+  <div class="proj-preview-box">
+    <iframe src="https://mind2mind2.vercel.app/" loading="lazy"></iframe>
+  </div>
+  <div class="proj-url">▲ mind2mind2.vercel.app</div>
+</div>
+
+<div class="progress-bar" id="progressBar"></div>
+<div class="scanlines"></div>
+<div class="dots" id="dots"></div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const bar = document.getElementById('progressBar');
+  const dotsEl = document.getElementById('dots');
+  let current = 0;
+  const DURATION = 6000;
+
+  // Create dots
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    dotsEl.appendChild(d);
+  });
+
+  function showSlide(idx) {
+    slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+    dotsEl.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+    bar.style.transition = 'none'; bar.style.width = '0%';
+    setTimeout(() => { bar.style.transition = `width ${DURATION}ms linear`; bar.style.width = '100%'; }, 50);
+  }
+
+  setInterval(() => {
+    current = (current + 1) % slides.length;
+    showSlide(current);
+  }, DURATION);
+
+  showSlide(0);
+</script>
+</body>
+</html>
