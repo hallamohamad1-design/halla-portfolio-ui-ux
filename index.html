@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+  <title>Halla Mohamed ✦</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+
+  <!-- Mobile fallback — now shows full 2D portfolio -->
+  <div class="mobile-text" id="mobileFallback">
+    <div class="mobile-header">
+      <div class="mobile-avatar">HM</div>
+      <h1>Halla Mohamed</h1>
+      <p class="mobile-title">AI Engineer × UI/UX Designer</p>
+      <div class="mobile-tags">
+        <span>AASTMT · GPA 3.96</span>
+        <span>Luxor, Egypt</span>
+      </div>
+    </div>
+    <div class="mobile-sections">
+      <details class="mobile-section" open>
+        <summary>About Me</summary>
+        <p>Computer Science student at AASTMT, passionate about building intelligent, human-centered digital products. Trained by NTI (Digital Egypt Pioneers) and certified in UI/UX by Microsoft.</p>
+        <a href="https://halla-portfolio.vercel.app/HALLA-CV.pdf" download class="mobile-cv-btn">⬇ Download CV</a>
+      </details>
+      <details class="mobile-section">
+        <summary>Projects</summary>
+        <div class="mobile-proj"><strong>Ma5zany</strong> — Smart Inventory System<br><a href="https://ma5zany-final.vercel.app" target="_blank">▲ Live</a></div>
+        <div class="mobile-proj"><strong>CivicPulse</strong> — Community Issue Tracker<br><a href="https://civic-final-production-a84c.up.railway.app/" target="_blank">▲ Live</a></div>
+        <div class="mobile-proj"><strong>Port Scanner</strong> — Network Security Tool<br><a href="https://port-scanner-sand.vercel.app/" target="_blank">▲ Live</a></div>
+        <div class="mobile-proj"><strong>Mind2Mind</strong> — Mental Health Platform<br><a href="https://mind2mind2.vercel.app/" target="_blank">▲ Live</a></div>
+      </details>
+      <details class="mobile-section">
+        <summary>Contact</summary>
+        <p><a href="mailto:hallamohamad1@gmail.com">✉ hallamohamad1@gmail.com</a></p>
+        <p><a href="https://github.com/hallamohamad1-design" target="_blank">⌥ GitHub</a></p>
+        <p><a href="https://www.linkedin.com/in/halla-mohamed-4b2853357" target="_blank">in LinkedIn</a></p>
+      </details>
+    </div>
+  </div>
+
+  <!-- Touch gesture hint (mobile/tablet) -->
+  <div class="touch-hint" id="touchHint">
+    <div class="touch-hint-inner">
+      <span class="touch-icon">✋</span>
+      <span>Drag to rotate · Pinch to zoom</span>
+    </div>
+  </div>
+
+  <!-- Lazy-load splash (shown before 3D loads) -->
+  <div id="lazySplash">
+    <div class="splash-logo">HALLA MOHAMED</div>
+    <div class="splash-sub">AI Engineer · UI/UX Designer</div>
+    <button class="splash-enter-btn" id="splashEnterBtn">ENTER PORTFOLIO</button>
+    <div class="splash-hint">Best experienced on desktop with a modern browser</div>
+  </div>
+
+  <!-- Touch gesture hint (desktop + tablet) -->
+  <div class="touch-hint" id="touchHint">
+    <div class="touch-hint-inner">
+      <span class="touch-icon">✋</span>
+      <span>Drag to rotate · Scroll to zoom · Click objects to explore</span>
+    </div>
+  </div>
+
+  <!-- Loading screen -->
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loading-ring" id="loadingRing">
+      <span>HALLA</span>
+      <span>MOHAMED</span>
+    </div>
+    <div class="loading-bar-wrap"><div class="loading-bar" id="loadingBar"></div></div>
+  </div>
+
+  <!-- Top banner navigation -->
+  <div class="banner" id="banner">
+    <span class="banner-link" id="btn-about">ABOUT ME</span>
+    <span class="banner-link" id="btn-projects">PROJECTS</span>
+    <span class="banner-link" id="btn-skills">SKILLS</span>
+    <span class="banner-link" id="btn-experience">EXPERIENCE</span>
+    <span class="banner-link" id="btn-contact">CONTACT</span>
+  </div>
+
+  <!-- Back button -->
+  <button class="back-btn" id="backBtn" aria-label="Go back">&#8592;</button>
+
+  <!-- Panel overlays (CSS panels shown over 3D) -->
+  <div class="panel" id="panel-about">
+    <div class="panel-inner">
+      <div class="panel-header">
+        <span class="panel-num">01</span>
+        <h2>About Me</h2>
+      </div>
+      <div class="panel-body about-body">
+        <div class="about-avatar">
+          <div class="avatar-ring"><span>HM</span></div>
+          <div class="about-tags">
+            <span class="atag">AI Engineer</span>
+            <span class="atag">UI/UX Designer</span>
+            <span class="atag">GDG Member</span>
+          </div>
+        </div>
+        <div class="about-text">
+          <p class="about-lead">Computer Science student at <strong>AASTMT</strong> — GPA <strong>3.96</strong>. Passionate about building intelligent, human-centered digital products.</p>
+          <p>I blend AI/ML expertise with UI/UX design principles — trained by <strong>NTI</strong> under the Digital Egypt Pioneers Initiative and certified in UI/UX by <strong>Microsoft</strong>.</p>
+          <div class="about-meta">
+            <div class="meta-row"><span class="meta-icon">◎</span><span>Luxor, Egypt</span></div>
+            <div class="meta-row"><span class="meta-icon">✉</span><span>hallamohamad1@gmail.com</span></div>
+            <div class="meta-row"><span class="meta-icon">◈</span><span>AASTMT — B.Sc. Computer Science</span></div>
+          </div>
+          <a href="/HALLA-CV.pdf" download="Halla-Mohamed-CV.pdf" class="cv-download-btn">
+            <span class="cv-btn-icon">⬇</span>
+            <span>Download CV</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-projects">
+    <div class="panel-inner">
+      <div class="panel-header">
+        <span class="panel-num">02</span>
+        <h2>Projects</h2>
+      </div>
+      <div class="panel-body projects-body">
+
+        <div class="proj-card featured">
+          <div class="proj-preview">
+            <img src="https://opengraph.githubassets.com/1/hallamohamad1-design/Ma5zany-final-" alt="Ma5zany preview" loading="lazy" onerror="this.parentElement.style.display='none'" />
+          </div>
+          <div class="proj-tags"><span>Java</span><span>TypeScript</span><span>AI/ML</span><span>QR Scanner</span></div>
+          <h3>Ma5zany — Smart Inventory System</h3>
+          <p>AI-powered inventory management with a QR code scanner. Role-based auth, real-time stock tracking, and Gemini API analysis. Small warehouses scan a product's QR code to instantly update inventory and get AI-flagged alerts.</p>
+          <div class="proj-links">
+            <a href="https://ma5zany-final.vercel.app" target="_blank" rel="noopener">▲ Vercel (Scanner)</a>
+            <a href="https://github.com/hallamohamad1-design/Ma5zany-final-" target="_blank" rel="noopener">⌥ GitHub (Scanner)</a>
+            <a href="https://github.com/Kero-George22/M5zany-newBranch" target="_blank" rel="noopener">⌥ GitHub (Full Project)</a>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-preview">
+            <img src="https://civic-final-production-a84c.up.railway.app/og-image.png" alt="CivicPulse preview" loading="lazy" onerror="this.parentElement.style.display='none'" />
+          </div>
+          <div class="proj-tags"><span>React</span><span>TypeScript</span><span>tRPC</span><span>MySQL</span></div>
+          <h3>CivicPulse — Community Issue Tracker</h3>
+          <p>Community-driven platform where residents report and upvote local infrastructure issues. Interactive Google Maps with color-coded statuses and AI-powered analysis via n8n workflows.</p>
+          <div class="proj-links">
+            <a href="https://civic-final-production-a84c.up.railway.app/" target="_blank" rel="noopener">⬡ Live on Railway</a>
+            <a href="https://github.com/hallamohamad1-design/civic-final" target="_blank" rel="noopener">⌥ GitHub</a>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-tags"><span>HTML/CSS</span><span>JavaScript</span><span>Networking</span></div>
+          <h3>TCP Three-Way Handshake Visualizer</h3>
+          <p>Educational website with interactive animations demonstrating SYN, SYN-ACK, and ACK packet exchanges. Turns dense networking theory into a visual, step-by-step story.</p>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-preview proj-preview--screen">
+            <iframe src="https://port-scanner-sand.vercel.app/" title="Port Scanner preview" loading="lazy" tabindex="-1"></iframe>
+          </div>
+          <div class="proj-tags"><span>Python</span><span>Network Security</span><span>Web App</span></div>
+          <h3>Port Scanner Web Application</h3>
+          <p>Web-based port scanner for network security analysis. Wraps CLI port scanning in a clean UI so developers can audit their own systems without memorizing commands.</p>
+          <div class="proj-links">
+            <a href="https://port-scanner-sand.vercel.app/" target="_blank" rel="noopener">▲ Live Demo</a>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <div class="proj-preview proj-preview--screen">
+            <iframe src="https://mind2mind2.vercel.app/" title="Mind2Mind preview" loading="lazy" tabindex="-1"></iframe>
+          </div>
+          <div class="proj-tags"><span>React</span><span>AI/ML</span><span>Mental Health</span><span>Web App</span></div>
+          <h3>Mind2Mind — Mental Health Support Platform</h3>
+          <p>A supportive platform connecting people through shared experiences and mental wellness resources. Built with a human-centered design approach to make mental health support more accessible and approachable.</p>
+          <div class="proj-links">
+            <a href="https://mind2mind2.vercel.app/" target="_blank" rel="noopener">▲ Live Demo</a>
+          </div>
+        </div>
+
+        <div class="proj-card suggested">
+          <div class="proj-tags"><span>Figma</span><span>UI/UX</span><span>★ Suggested</span></div>
+          <h3>FinFlow — Personal Finance Dashboard</h3>
+          <p>Suggested UI/UX case study: a finance app for young Egyptians with onboarding flow, spending analytics, and savings goals. Your CIB & Masr Bank internships make this uniquely credible.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-skills">
+    <div class="panel-inner">
+      <div class="panel-header">
+        <span class="panel-num">03</span>
+        <h2>Skills</h2>
+      </div>
+      <div class="panel-body skills-body">
+        <div class="skill-block">
+          <h4>AI &amp; Machine Learning</h4>
+          <ul><li>ML Fundamentals &amp; Algorithms</li><li>Data Analysis &amp; Insights</li><li>Gemini API Integration</li><li>NTI / Digital Egypt Pioneers</li></ul>
+        </div>
+        <div class="skill-block">
+          <h4>UI/UX Design</h4>
+          <ul><li>Figma — Wireframing &amp; Prototyping</li><li>Design Thinking Methodology</li><li>User Research &amp; Usability Testing</li><li>Responsive Design Systems</li></ul>
+        </div>
+        <div class="skill-block">
+          <h4>Development</h4>
+          <ul><li>Python (Proficient)</li><li>TypeScript / JavaScript</li><li>React, tRPC, Tailwind CSS</li><li>Java / Spring Boot</li></ul>
+        </div>
+        <div class="skill-block">
+          <h4>Networking &amp; Security</h4>
+          <ul><li>TCP/IP Protocols</li><li>Network Security &amp; Port Scanning</li><li>Computer Networking Fundamentals</li><li>LaTeX Technical Documentation</li></ul>
+        </div>
+        <div class="certs-row">
+          <div class="cert"><span class="cert-badge">NTI</span><div><strong>Machine Learning &amp; Data Science</strong><small>Digital Egypt Pioneers Initiative</small></div></div>
+          <div class="cert"><span class="cert-badge">MS</span><div><strong>UI/UX Design</strong><small>Microsoft</small></div></div>
+          <div class="cert"><span class="cert-badge">MS</span><div><strong>Artificial Intelligence</strong><small>Microsoft</small></div></div>
+          <div class="cert"><span class="cert-badge">PY</span><div><strong>Python Programming</strong><small>Professional Certification</small></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-experience">
+    <div class="panel-inner">
+      <div class="panel-header">
+        <span class="panel-num">04</span>
+        <h2>Experience</h2>
+      </div>
+      <div class="panel-body exp-body">
+        <div class="exp-item">
+          <div class="exp-dot"></div>
+          <div><h4>Content Developer Intern <span>— mResource</span></h4><p>Developed educational content using LaTeX. Created tutorial videos and notes to enhance accessibility. Applied user-centered design thinking to improve content quality.</p></div>
+        </div>
+        <div class="exp-item">
+          <div class="exp-dot"></div>
+          <div><h4>Banking Intern <span>— Commercial International Bank (CIB)</span></h4><p>Gained practical experience in banking operations and financial services. Understood customer service protocols and digital banking systems.</p></div>
+        </div>
+        <div class="exp-item">
+          <div class="exp-dot"></div>
+          <div><h4>Banking Intern <span>— Masr Bank</span></h4><p>Developed understanding of retail banking processes and customer relationship management. Learned about digital banking technologies.</p></div>
+        </div>
+        <div class="exp-item">
+          <div class="exp-dot"></div>
+          <div><h4>Member <span>— Google Developer Group (GDG)</span></h4><p>Active member of the campus Software Engineering Chapter. Engaged with the developer community and collaborated on software engineering initiatives.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-contact">
+    <div class="panel-inner">
+      <div class="panel-header">
+        <span class="panel-num">05</span>
+        <h2>Let's Talk</h2>
+      </div>
+      <div class="panel-body contact-body">
+        <p class="contact-lead">Open to internships, collaborations, and interesting projects. Building something at the intersection of AI and design? Let's connect.</p>
+        <div class="contact-links">
+          <a href="mailto:hallamohamad1@gmail.com" class="contact-link">✉ hallamohamad1@gmail.com</a>
+          <a href="https://github.com/hallamohamad1-design" target="_blank" rel="noopener" class="contact-link">⌥ github.com/hallamohamad1-design</a>
+        </div>
+        <form class="contact-form" id="contactForm">
+          <input type="text" name="name" placeholder="Your name" required />
+          <input type="email" name="email" placeholder="Your email" required />
+          <textarea name="message" placeholder="Your message" rows="4" required></textarea>
+          <button type="submit">Send Message ➔</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Three.js canvas -->
+  <div id="webgl"></div>
+
+  <!-- Keyboard game hint overlay -->
+  <div class="key-hint" id="keyHint">
+    <div class="key-hint-header">
+      <span class="key-hint-icon">⌨</span>
+      <span class="key-hint-title">KEYBOARD SHORTCUTS</span>
+      <button class="key-hint-close" id="keyHintClose">✕</button>
+    </div>
+    <div class="key-hint-body">
+      <div class="key-row">
+        <kbd data-key="1">1</kbd>
+        <span>About Me</span>
+        <span class="key-or">or type</span>
+        <code>ABOUT</code>
+      </div>
+      <div class="key-row">
+        <kbd data-key="2">2</kbd>
+        <span>Projects</span>
+        <span class="key-or">or type</span>
+        <code>PROJECTS</code>
+      </div>
+      <div class="key-row">
+        <kbd data-key="3">3</kbd>
+        <span>Skills</span>
+        <span class="key-or">or type</span>
+        <code>SKILLS</code>
+      </div>
+      <div class="key-row">
+        <kbd data-key="4">4</kbd>
+        <span>Experience</span>
+        <span class="key-or">or type</span>
+        <code>EXPERIENCE</code>
+      </div>
+      <div class="key-row">
+        <kbd data-key="5">5</kbd>
+        <span>Contact</span>
+        <span class="key-or">or type</span>
+        <code>CONTACT</code>
+      </div>
+      <div class="key-row esc-row">
+        <kbd>ESC</kbd>
+        <span>Close panel</span>
+      </div>
+    </div>
+    <div class="key-buffer-wrap">
+      <span class="key-buffer-label">TYPING:</span>
+      <span class="key-buffer" id="keyBuffer"></span>
+      <span class="key-cursor">▌</span>
+    </div>
+  </div>
+
+  <!-- Keyboard toggle button -->
+  <button class="key-toggle-btn" id="keyToggleBtn" title="Keyboard shortcuts (press any key)">⌨</button>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

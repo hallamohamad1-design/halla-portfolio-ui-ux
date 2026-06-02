@@ -1,0 +1,3 @@
+Replace this file with your actual CV PDF named HALLA-CV.pdf
+Place it at: portofolio/public/HALLA-CV.pdf
+It will be served at: /HALLA-CV.pdf
