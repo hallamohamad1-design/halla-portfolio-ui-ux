@@ -47,7 +47,7 @@ async function startScene() {
   scene.fog = new THREE.Fog(0x0d0d1a, 35, 80);
 
   const camera = new THREE.PerspectiveCamera(40, W / H, 0.1, 200);
-  camera.position.set(12, 12, 12);
+  camera.position.set(14, 18, 14);
   camera.lookAt(0, 1, 0);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -490,7 +490,7 @@ async function startScene() {
     mug:          {x:3,   y:4.5, z:0.5, lx:1.5,  ly:2.7,  lz:-5.5 },
     chairGroup:   {x:2,   y:5.5, z:0.5, lx:1.8,  ly:3.2,  lz:-5.5 },
   };
-  const camHome = {x:12,y:12,z:12,lx:0,ly:1,lz:0};
+  const camHome = {x:14,y:18,z:14,lx:0,ly:1,lz:0};
 
   // Intro drop-in — includes laptop
   [monL,monR,laptopGroup,shG,mugG,chG].forEach((obj,i)=>{
@@ -560,21 +560,6 @@ async function startScene() {
   }
 
   // ── CV Download — smart fallback ────────────────────────────────────────────
-  document.getElementById('cvDownloadBtn')?.addEventListener('click', function(e) {
-    // Try local file first, fall back gracefully
-    fetch('/HALLA-CV.pdf', { method: 'HEAD' }).then(r => {
-      if (!r.ok) {
-        e.preventDefault();
-        // Show instructions if no PDF uploaded yet
-        const msg = document.createElement('div');
-        msg.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(13,13,26,0.95);border:1px solid rgba(237,167,45,0.4);border-radius:10px;padding:1rem 1.5rem;color:#e8d5b0;font-size:0.82rem;z-index:9999;text-align:center;backdrop-filter:blur(12px);max-width:340px;';
-        msg.innerHTML = '📄 To enable CV download:<br><strong style="color:#eda72d">Drop HALLA-CV.pdf into the public/ folder</strong><br><small style="color:#666;margin-top:0.4rem;display:block">Then run: git add . && git commit -m "Add CV" && git push</small>';
-        document.body.appendChild(msg);
-        setTimeout(() => msg.remove(), 5000);
-      }
-    }).catch(() => {});
-  });
-
   setupKB(camT,panelMap,camera,camHome);
 
   // Touch hint
